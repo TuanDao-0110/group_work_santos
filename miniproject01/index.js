@@ -60,7 +60,6 @@ const input = document.querySelector("#github-username");
 const baseURL = "https://api.github.com/users/";
 
 const resultDisplay = document.querySelector('#repos-list')
-
 let newWrapper = new FetchWrapper(baseURL);
 
 
@@ -73,17 +72,25 @@ form.addEventListener('submit', function (e) {
 
     console.log(userName);
 
-    const endpoint = userName + "/repos/";
+    const endpoint = userName + "/repos";
 
-    newWrapper.get(endpoint).then(data => console.log(data));
+    newWrapper.get(endpoint).then(data => {
+        data?.forEach(e => renderResult(e))
+    });
 
 
 });
 
 
 
-const renderResult =(text)=> { 
-    li.textContent =text
-    resultDisplay.appendChild(li)
+const renderResult = (item) => {
+    const newLi = document.createElement('li')
+    newLi.innerHTML = `<h2>
+    ${item.name}
+    </h2>
+    <p><a>${item.html_url}</a></p>
+    `
+
+    resultDisplay.appendChild(newLi)
 
 }
