@@ -62,34 +62,25 @@ let receiveData
 let newFetch = new FetchWrapper(baseLink)
 
 
-
-let selBase = document.querySelector('#base-currency')
 let selTarget = document.querySelector('#target-currency')
+let selBase = document.querySelector('#base-currency')
+
 let converResult = document.querySelector('#conversion-result')
 let fromValue;
 let toValue;
-const getApiData = (endpoint) => {
-  newFetch.get(endpoint).then(data => {
-    receiveData = data.conversion_rates
-    fromValue = receiveData[selBase.value]
-    toValue = receiveData[selTarget.value]
-  }).catch(err => console.log(err))
+
+const callAPI = () => {
+  fromValue = selBase.value
+  toValue = selTarget.value
+  newFetch.get(fromValue).then(data => {
+
+    let result = data.conversion_rates[toValue]
+    converResult.innerHTML = result.toFixed(2)
+
+  })
 }
 
-selBase.addEventListener('change', (e) => {
-  fromValue = receiveData[e.target.value]
+selTarget.addEventListener('change',callAPI)
+selBase.addEventListener('change', callAPI)
 
-  converCal()
-})
-selTarget.addEventListener('change', (e) => {
-  toValue = receiveData[e.target.value]
 
-  converCal()
-})
-getApiData('USD')
-
-const converCal = () => {
-  let result = (toValue / fromValue).toFixed(2)
-  converResult.innerHTML = result
-
-}
