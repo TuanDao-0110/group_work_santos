@@ -5,7 +5,11 @@ class FetchWrapper {
     }
 
     get(endpoint) {
-        return fetch(this.baseURL + endpoint)
+        return fetch(this.baseURL + endpoint, {
+            headers: {
+                "Authorization": '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'
+            }
+        })
             .then(response => response.json());
     }
 
@@ -75,8 +79,9 @@ form.addEventListener('submit', function (e) {
     const endpoint = userName + "/repos";
 
     newWrapper.get(endpoint).then(data => {
+        resultDisplay.innerHTML = ''
         data?.forEach(e => renderResult(e))
-    });
+    }).catch(err => alert('can not find repository'));
 
 
 });
@@ -90,7 +95,6 @@ const renderResult = (item) => {
     </h2>
     <p><a>${item.html_url}</a></p>
     `
-
     resultDisplay.appendChild(newLi)
 
 }
