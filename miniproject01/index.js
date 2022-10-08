@@ -1,4 +1,3 @@
-/* Sample usage do not modify */
 class FetchWrapper {
     constructor(baseURL) {
         this.baseURL = baseURL;
@@ -6,9 +5,8 @@ class FetchWrapper {
 
     get(endpoint) {
         return fetch(this.baseURL + endpoint, {
-            method:'get',
             headers: {
-                "Authorization": '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'
+                "Authorization": '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'
             }
         })
             .then(response => response.json());
@@ -51,7 +49,6 @@ This project does not require you to log in and authenticate with the GitHub API
 However, the API has a limit of 60 requests per minute.
 So, if you get an error saying: You have triggered an abuse detection mechanism.
 Please wait a few minutes before you try again., then you should wait about one minute before trying again.
-
 The goal of this project is to allow the user to enter a GitHub username (for example,
 kalwar or yourgithubusername), and then when the user submits the form,
 the app will show the list of GitHub repositories for that user using the GitHub API. */
@@ -65,7 +62,6 @@ const input = document.querySelector("#github-username");
 const baseURL = "https://api.github.com/users/";
 
 const resultDisplay = document.querySelector('#repos-list')
-
 let newWrapper = new FetchWrapper(baseURL);
 
 
@@ -76,17 +72,27 @@ form.addEventListener('submit', function (e) {
 
     let userName = input.value;
 
+    console.log(userName);
 
-    const endpoint = userName + "/repos/";
+    const endpoint = userName + "/repos";
 
-    newWrapper.get(endpoint).then(data => console.log(data)).catch(err => console.log('err : ' + err));
+    newWrapper.get(endpoint).then(data => {
+        resultDisplay.innerHTML = ''
+        data?.forEach(e => renderResult(e))
+    }).catch(err => alert('can not find repository'));
 
 
 });
 
 
 
-const renderResult = (text) => {
-    li.textContent = text
-    resultDisplay.appendChild(li)
+const renderResult = (item) => {
+    const newLi = document.createElement('li')
+    newLi.innerHTML = `<h2>
+    ${item.name}
+    </h2>
+    <p><a>${item.html_url}</a></p>
+    `
+    resultDisplay.appendChild(newLi)
+
 }
