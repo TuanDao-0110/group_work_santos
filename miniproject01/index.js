@@ -5,7 +5,12 @@ class FetchWrapper {
     }
 
     get(endpoint) {
-        return fetch(this.baseURL + endpoint)
+        return fetch(this.baseURL + endpoint, {
+            method:'get',
+            headers: {
+                "Authorization": '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'
+            }
+        })
             .then(response => response.json());
     }
 
@@ -71,19 +76,17 @@ form.addEventListener('submit', function (e) {
 
     let userName = input.value;
 
-    console.log(userName);
 
     const endpoint = userName + "/repos/";
 
-    newWrapper.get(endpoint).then(data => console.log(data));
+    newWrapper.get(endpoint).then(data => console.log(data)).catch(err => console.log('err : ' + err));
 
 
 });
 
 
 
-const renderResult =(text)=> { 
-    li.textContent =text
+const renderResult = (text) => {
+    li.textContent = text
     resultDisplay.appendChild(li)
-
 }
